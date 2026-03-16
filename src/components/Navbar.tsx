@@ -1,16 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Menu, X, ShoppingBag } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const location = useLocation();
-  
-  const isHome = location.pathname === '/';
-  // Use dark text if we've scrolled OR if we are not on the home page (where the background is light)
-  const useDarkText = scrolled || !isHome;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,7 +25,7 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled || !isHome ? 'bg-brand-beige/90 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'
+        scrolled ? 'bg-brand-beige/90 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
@@ -39,15 +34,13 @@ export default function Navbar() {
           className="md:hidden text-brand-charcoal"
           onClick={() => setMobileMenuOpen(true)}
         >
-          <Menu className={`w-6 h-6 ${useDarkText ? 'text-brand-charcoal' : 'text-white'}`} />
+          <Menu className="w-6 h-6 text-brand-charcoal" />
         </button>
 
         {/* Logo */}
         <Link 
           to="/" 
-          className={`text-2xl font-semibold tracking-tight transition-colors duration-500 ${
-            useDarkText ? 'text-brand-charcoal' : 'text-white'
-          }`}
+          className="text-2xl font-semibold tracking-tight text-brand-charcoal transition-colors duration-500"
         >
           Aura
         </Link>
@@ -58,9 +51,7 @@ export default function Navbar() {
             <Link
               key={link.name}
               to={link.path}
-              className={`text-sm font-medium tracking-wide transition-colors duration-300 hover:opacity-70 ${
-                useDarkText ? 'text-brand-charcoal' : 'text-white'
-              }`}
+              className="text-sm font-medium tracking-wide text-brand-charcoal transition-colors duration-300 hover:opacity-70"
             >
               {link.name}
             </Link>
@@ -68,7 +59,7 @@ export default function Navbar() {
         </nav>
 
         {/* Cart Icon */}
-        <button className={`transition-colors duration-500 ${useDarkText ? 'text-brand-charcoal' : 'text-white'}`}>
+        <button className="text-brand-charcoal transition-colors duration-500 hover:opacity-70">
           <ShoppingBag className="w-5 h-5" />
         </button>
       </div>
