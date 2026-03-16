@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-beige: #F7F5F2;
+  --color-brand-rose: #E8D8D0;
+  --color-brand-taupe: #D4C4B7;
+  --color-brand-sage: #C2CEC3;
+  --color-brand-charcoal: #2C2A29;
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+}
+
+body {
+  background-color: var(--color-brand-beige);
+  color: var(--color-brand-charcoal);
+  -webkit-font-smoothing: antialiased;
+}
