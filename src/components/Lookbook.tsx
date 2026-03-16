@@ -1,26 +1,33 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, ShoppingBag } from 'lucide-react';
+import { useCart } from '../context/CartContext';
 
 const images = [
-  { src: 'https://images.unsplash.com/photo-1531123897727-8f129e1bf98c?q=80&w=800&auto=format&fit=crop', alt: 'Afro hair', aspect: 'aspect-[3/4]', caption: '@sarah_styles • Type 4C', product: 'Afro Kinky Bulk Hair', price: '$85' },
-  { src: 'https://images.unsplash.com/photo-1580618672591-eb180b1a973f?q=80&w=800&auto=format&fit=crop', alt: 'Braids', aspect: 'aspect-square', caption: '@braidmagic • Protective Style', product: 'Pre-Stretched Braiding Hair', price: '$24' },
-  { src: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?q=80&w=800&auto=format&fit=crop', alt: 'Curls', aspect: 'aspect-[4/5]', caption: '@curly.j • Type 3B', product: 'Curly Lace Front Wig', price: '$250' },
-  { src: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=800&auto=format&fit=crop', alt: 'Wavy hair', aspect: 'aspect-square', caption: '@wavy_days • Type 2A', product: 'Body Wave Clip-ins', price: '$145' },
-  { src: 'https://images.unsplash.com/photo-1605980776566-0486c3ac7617?q=80&w=800&auto=format&fit=crop', alt: 'Coily hair', aspect: 'aspect-[3/4]', caption: '@natural.crown • Type 4A', product: 'Coily Drawstring Ponytail', price: '$65' },
-  { src: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=800&auto=format&fit=crop', alt: 'Straight hair', aspect: 'aspect-[4/5]', caption: '@sleek_looks • Type 1', product: 'Raw Straight Bundle', price: '$120' },
+  { id: 'look1', src: 'https://images.unsplash.com/photo-1531123897727-8f129e1bf98c?q=80&w=800&auto=format&fit=crop', alt: 'Afro hair', aspect: 'aspect-[3/4]', caption: '@sarah_styles • Type 4C', product: 'Afro Kinky Bulk Hair', price: '$85' },
+  { id: 'look2', src: 'https://images.unsplash.com/photo-1580618672591-eb180b1a973f?q=80&w=800&auto=format&fit=crop', alt: 'Braids', aspect: 'aspect-square', caption: '@braidmagic • Protective Style', product: 'Pre-Stretched Braiding Hair', price: '$24' },
+  { id: 'look3', src: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?q=80&w=800&auto=format&fit=crop', alt: 'Curls', aspect: 'aspect-[4/5]', caption: '@curly.j • Type 3B', product: 'Curly Lace Front Wig', price: '$250' },
+  { id: 'look4', src: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=800&auto=format&fit=crop', alt: 'Wavy hair', aspect: 'aspect-square', caption: '@wavy_days • Type 2A', product: 'Body Wave Clip-ins', price: '$145' },
+  { id: 'look5', src: 'https://images.unsplash.com/photo-1605980776566-0486c3ac7617?q=80&w=800&auto=format&fit=crop', alt: 'Coily hair', aspect: 'aspect-[3/4]', caption: '@natural.crown • Type 4A', product: 'Coily Drawstring Ponytail', price: '$65' },
+  { id: 'look6', src: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=800&auto=format&fit=crop', alt: 'Straight hair', aspect: 'aspect-[4/5]', caption: '@sleek_looks • Type 1', product: 'Raw Straight Bundle', price: '$120' },
 ];
 
 export default function Lookbook() {
   const [selectedImage, setSelectedImage] = useState<typeof images[0] | null>(null);
+  const { addItem } = useCart();
 
-  const handleAddToCart = (e: React.MouseEvent, product: string) => {
+  const handleAddToCart = (e: React.MouseEvent, img: typeof images[0]) => {
     e.stopPropagation();
-    alert(`Added ${product} to cart!`);
+    addItem({
+      id: img.id,
+      name: img.product,
+      price: img.price,
+      image: img.src
+    });
   };
 
   return (
-    <section id="lookbook" className="py-24 px-6 md:px-12 bg-white">
+    <section id="lookbook" className="py-24 px-6 md:px-12 bg-theme-bg theme-transition">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-medium mb-4">Shop The Look</h2>
@@ -51,7 +58,7 @@ export default function Lookbook() {
                 </p>
                 <button 
                   className="mt-3 bg-white text-brand-charcoal px-5 py-2.5 rounded-full text-xs font-semibold w-fit translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-75 hover:bg-brand-taupe flex items-center gap-2"
-                  onClick={(e) => handleAddToCart(e, img.product)}
+                  onClick={(e) => handleAddToCart(e, img)}
                 >
                   <ShoppingBag className="w-3.5 h-3.5" />
                   Shop {img.product} • {img.price}
@@ -99,7 +106,7 @@ export default function Lookbook() {
                 </div>
                 <button 
                   className="bg-brand-taupe text-brand-charcoal px-8 py-4 rounded-full text-sm font-bold hover:bg-white transition-colors duration-300 flex items-center gap-2 whitespace-nowrap"
-                  onClick={(e) => handleAddToCart(e, selectedImage.product)}
+                  onClick={(e) => handleAddToCart(e, selectedImage)}
                 >
                   <ShoppingBag className="w-4 h-4" />
                   Add to Cart — {selectedImage.price}

@@ -6,8 +6,13 @@ import { Moon, Sun } from 'lucide-react';
 export default function Footer() {
   const { calmMode, toggleCalmMode } = useContext(CalmModeContext);
 
+  const handleToggle = () => {
+    console.log('Footer: Toggling Calm Mode...');
+    toggleCalmMode();
+  };
+
   return (
-    <footer className="bg-brand-charcoal text-brand-beige pt-20 pb-10 px-6 md:px-12">
+    <footer className={`bg-brand-charcoal text-brand-beige pt-20 pb-10 px-6 md:px-12 theme-transition ${calmMode ? 'brightness-110' : ''}`}>
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           <div className="md:col-span-2">
@@ -56,8 +61,12 @@ export default function Footer() {
           
           <div className="flex items-center gap-6">
             <button 
-              onClick={toggleCalmMode}
-              className="flex items-center gap-2 text-sm text-brand-beige/70 hover:text-white transition-colors"
+              onClick={handleToggle}
+              className={`flex items-center gap-2 text-sm px-4 py-2 rounded-full border transition-all duration-500 ${
+                calmMode 
+                  ? 'bg-brand-taupe text-brand-charcoal border-brand-taupe' 
+                  : 'text-brand-beige/70 hover:text-white border-brand-beige/20 hover:border-brand-beige'
+              }`}
               title="Toggle Calm Mode (Reduces motion and contrast)"
             >
               {calmMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}

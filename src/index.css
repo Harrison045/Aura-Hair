@@ -7,10 +7,33 @@
   --color-brand-sage: #C2CEC3;
   --color-brand-charcoal: #2C2A29;
   --font-sans: "Plus Jakarta Sans", sans-serif;
+  
+  --color-theme-bg: var(--bg-primary);
+  --color-theme-text: var(--text-primary);
+}
+
+:root {
+  --bg-primary: #F7F5F2;
+  --bg-secondary: #FFFFFF;
+  --text-primary: #2C2A29;
+  --accent-soft: #E8D8D0;
+  --transition-speed: 800ms;
+}
+
+body.calm-mode {
+  --bg-primary: #D6C7B8;
+  --bg-secondary: #D6C7B8;
+  --text-primary: #3D3936;
+  --accent-soft: transparent;
 }
 
 body {
-  background-color: var(--color-brand-beige);
-  color: var(--color-brand-charcoal);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
+  transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+.theme-transition {
+  transition: all var(--transition-speed) ease;
 }

@@ -1,10 +1,14 @@
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { CalmModeContext } from '../App';
 
 export default function Hero() {
+  const { calmMode } = useContext(CalmModeContext);
+
   return (
-    <section className="relative min-h-screen w-full bg-brand-beige pt-32 pb-16 px-6 md:px-12 flex items-center overflow-hidden">
+    <section className="relative min-h-screen w-full bg-theme-bg theme-transition pt-32 pb-16 px-6 md:px-12 flex items-center overflow-hidden">
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
         
         {/* Left Content */}
@@ -14,7 +18,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
-            <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-medium leading-[1.05] tracking-tight text-brand-charcoal mb-6">
+            <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-medium leading-[1.05] tracking-tight text-theme-text mb-6">
               Your crown, <br />
               <span className="text-brand-taupe italic font-light">uncompromised.</span>
             </h1>
@@ -24,7 +28,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-            className="text-lg md:text-xl text-brand-charcoal/70 font-light mb-10 max-w-lg leading-relaxed"
+            className="text-lg md:text-xl text-theme-text opacity-70 font-light mb-10 max-w-lg leading-relaxed"
           >
             Premium 100% virgin hair, extensions, and gentle formulas crafted to celebrate every texture and style.
           </motion.p>
@@ -37,13 +41,13 @@ export default function Hero() {
           >
             <Link 
               to="/shop"
-              className="inline-flex items-center justify-center gap-2 bg-brand-charcoal text-brand-beige px-8 py-4 rounded-full text-sm font-medium tracking-wide hover:bg-brand-taupe hover:text-brand-charcoal transition-all duration-300"
+              className="inline-flex items-center justify-center gap-2 bg-theme-text text-theme-bg px-8 py-4 rounded-full text-sm font-medium tracking-wide hover:bg-brand-taupe hover:text-theme-text transition-all duration-300"
             >
               Shop Collection <ArrowRight className="w-4 h-4" />
             </Link>
             <Link 
               to="/quiz"
-              className="inline-flex items-center justify-center gap-2 bg-transparent border border-brand-charcoal/20 text-brand-charcoal px-8 py-4 rounded-full text-sm font-medium tracking-wide hover:border-brand-charcoal transition-all duration-300"
+              className="inline-flex items-center justify-center gap-2 bg-transparent border border-theme-text/20 text-theme-text px-8 py-4 rounded-full text-sm font-medium tracking-wide hover:border-theme-text transition-all duration-300"
             >
               Take the Hair Quiz
             </Link>
@@ -54,19 +58,19 @@ export default function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.8 }}
-            className="mt-16 pt-8 border-t border-brand-charcoal/10 grid grid-cols-3 gap-6"
+            className="mt-16 pt-8 border-t border-theme-text/10 grid grid-cols-3 gap-6"
           >
             <div>
-              <p className="text-2xl font-medium text-brand-charcoal">100%</p>
-              <p className="text-xs text-brand-charcoal/60 uppercase tracking-wider mt-1">Virgin Hair</p>
+              <p className="text-2xl font-medium text-theme-text transition-colors">100%</p>
+              <p className="text-xs text-theme-text opacity-60 uppercase tracking-wider mt-1 transition-colors">Virgin Hair</p>
             </div>
             <div>
-              <p className="text-2xl font-medium text-brand-charcoal">0%</p>
-              <p className="text-xs text-brand-charcoal/60 uppercase tracking-wider mt-1">Sulfates</p>
+              <p className="text-2xl font-medium text-theme-text transition-colors">0%</p>
+              <p className="text-xs text-theme-text opacity-60 uppercase tracking-wider mt-1 transition-colors">Sulfates</p>
             </div>
             <div>
-              <p className="text-2xl font-medium text-brand-charcoal">4A-4C</p>
-              <p className="text-xs text-brand-charcoal/60 uppercase tracking-wider mt-1">Specialists</p>
+              <p className="text-2xl font-medium text-theme-text transition-colors">4A-4C</p>
+              <p className="text-xs text-theme-text opacity-60 uppercase tracking-wider mt-1 transition-colors">Specialists</p>
             </div>
           </motion.div>
         </div>
@@ -78,13 +82,13 @@ export default function Hero() {
           transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
           className="order-1 lg:order-2 relative z-10"
         >
-          <div className="relative aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] rounded-[2rem] overflow-hidden shadow-2xl shadow-brand-charcoal/5">
+          <div className="relative aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] rounded-[2rem] overflow-hidden shadow-2xl shadow-theme-text/10">
             <img
               src="https://images.unsplash.com/photo-1605980776566-0486c3ac7617?q=80&w=1200&auto=format&fit=crop"
               alt="Woman with beautiful natural hair"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-charcoal/40 to-transparent opacity-60" />
+            <div className={`absolute inset-0 bg-gradient-to-t from-theme-text opacity-40 to-transparent transition-opacity duration-1000 ${calmMode ? 'opacity-20' : 'opacity-60'}`} />
           </div>
           
           {/* Floating Badge */}
@@ -92,7 +96,7 @@ export default function Hero() {
             initial={{ opacity: 0, x: 20, y: 20 }}
             animate={{ opacity: 1, x: 0, y: 0 }}
             transition={{ duration: 1, delay: 0.6 }}
-            className="absolute -bottom-6 -left-6 md:-bottom-10 md:-left-10 bg-white p-6 rounded-2xl shadow-xl max-w-[200px] z-20 hidden sm:block"
+            className={`absolute -bottom-6 -left-6 md:-bottom-10 md:-left-10 bg-[var(--bg-secondary)] theme-transition p-6 rounded-2xl shadow-xl max-w-[200px] z-20 hidden sm:block`}
           >
             <div className="flex gap-1 mb-2">
               {[1, 2, 3, 4, 5].map((star) => (
@@ -101,17 +105,17 @@ export default function Hero() {
                 </svg>
               ))}
             </div>
-            <p className="text-sm font-medium text-brand-charcoal leading-tight">
+            <p className="text-sm font-medium text-theme-text leading-tight transition-colors">
               "The best bundles I've ever installed."
             </p>
-            <p className="text-xs text-brand-charcoal/50 mt-2">— Sarah M.</p>
+            <p className="text-xs text-theme-text opacity-50 mt-2 transition-colors">— Sarah M.</p>
           </motion.div>
         </motion.div>
 
       </div>
       
       {/* Decorative Background Element */}
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-rose/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 opacity-50 pointer-events-none" />
+      <div className={`absolute top-0 right-0 w-[800px] h-[800px] bg-brand-rose/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 transition-opacity duration-1000 pointer-events-none ${calmMode ? 'opacity-0' : 'opacity-50'}`} />
     </section>
   );
 }

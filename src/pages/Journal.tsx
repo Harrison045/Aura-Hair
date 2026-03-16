@@ -46,7 +46,7 @@ export default function Journal() {
         className="text-center mb-20"
       >
         <h1 className="text-4xl md:text-6xl font-light mb-6">The Journal</h1>
-        <p className="text-lg text-brand-charcoal/70 max-w-2xl mx-auto">
+        <p className="text-lg text-theme-text opacity-70 max-w-2xl mx-auto">
           Expert advice, styling tutorials, and stories from the Aura community.
         </p>
       </motion.div>
@@ -67,12 +67,12 @@ export default function Journal() {
                 alt={article.title} 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
-              <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium">
+              <div className="absolute top-4 left-4 bg-theme-bg/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium">
                 {article.category}
               </div>
             </div>
             
-            <div className="flex items-center gap-4 text-sm text-brand-charcoal/50 mb-3">
+            <div className="flex items-center gap-4 text-sm text-theme-text opacity-50 mb-3">
               <span>{article.date}</span>
             </div>
             
@@ -80,7 +80,7 @@ export default function Journal() {
               {article.title}
             </h2>
             
-            <p className="text-brand-charcoal/70 mb-6 flex-grow">
+            <p className="text-theme-text opacity-70 mb-6 flex-grow">
               {article.excerpt}
             </p>
             

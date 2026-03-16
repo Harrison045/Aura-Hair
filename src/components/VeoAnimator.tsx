@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Upload, Play, Loader2, Sparkles, Image as ImageIcon, AlertCircle } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
@@ -110,7 +110,7 @@ export default function VeoAnimator() {
       clearInterval(msgInterval);
 
       if (operation.error) {
-        throw new Error(operation.error.message || 'Failed to generate video.');
+        throw new Error((operation.error as any).message || 'Failed to generate video.');
       }
 
       setStatusMessage('Fetching your video...');
@@ -244,7 +244,7 @@ export default function VeoAnimator() {
           <div className="absolute bottom-6 left-0 right-0 flex justify-center z-20">
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="bg-white/90 hover:bg-white text-brand-charcoal px-6 py-3 rounded-full text-sm font-medium shadow-lg flex items-center gap-2 transition-all transform hover:scale-105"
+              className="bg-theme-bg opacity-90 hover:opacity-100 text-theme-text px-6 py-3 rounded-full text-sm font-medium shadow-lg flex items-center gap-2 transition-all transform hover:scale-105"
             >
               <Upload className="w-4 h-4" />
               {previewUrl ? 'Change Photo' : 'Upload Photo'}
@@ -270,7 +270,7 @@ export default function VeoAnimator() {
               setPreviewUrl(null);
               setFile(null);
             }}
-            className="w-full bg-white/20 hover:bg-white/30 text-white py-3 rounded-full text-sm font-medium transition-colors"
+            className="w-full bg-theme-text opacity-20 hover:opacity-30 text-theme-bg py-3 rounded-full text-sm font-medium transition-colors"
           >
             Start Over
           </button>
@@ -280,8 +280,8 @@ export default function VeoAnimator() {
             disabled={!file || isGenerating}
             className={`w-full py-3 rounded-full text-sm font-medium flex items-center justify-center gap-2 transition-all ${
               !file || isGenerating
-                ? 'bg-white/10 text-white/30 cursor-not-allowed'
-                : 'bg-brand-taupe hover:bg-brand-rose text-brand-charcoal shadow-lg hover:shadow-xl'
+                ? 'bg-theme-text opacity-10 text-theme-text opacity-30 cursor-not-allowed'
+                : 'bg-brand-taupe hover:bg-brand-rose text-theme-bg shadow-lg hover:shadow-xl'
             }`}
           >
             {isGenerating ? (
