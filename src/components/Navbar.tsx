@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Menu, X, ShoppingBag } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
+import { User } from 'lucide-react';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { totalItems, setIsCartOpen } = useCart();
+  const { user, setIsAuthModalOpen } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,22 +64,47 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* Cart Icon */}
-        <button 
-          onClick={() => setIsCartOpen(true)}
-          className="relative text-brand-charcoal transition-colors duration-500 hover:opacity-70 group"
-        >
-          <ShoppingBag className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
-          {totalItems > 0 && (
-            <motion.span
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              className="absolute -top-2 -right-2 bg-brand-taupe text-brand-charcoal text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center"
-            >
-              {totalItems}
-            </motion.span>
-          )}
-        </button>
+        {/* Actions */}
+        <div className="flex items-center gap-4">
+          {/* Auth Icon */}
+          <button 
+            onClick={() => user ? navigate('/profile') : setIsAuthModalOpen(true)}
+            className="text-brand-charcoal transition-colors duration-500 hover:opacity-70 group flex items-center gap-2"
+          >
+            <div className="relative">
+              <User className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
+              {user && (
+                <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full border border-white" />
+              )}
+            </div>
+            {user ? (
+              <span className="hidden md:block text-xs font-medium text-brand-charcoal/60 truncate max-w-[100px]">
+                {user.displayName || user.email?.split('@')[0]}
+              </span>
+            ) : (
+              <span className="hidden md:block text-xs font-bold uppercase tracking-widest">Login</span>
+            )}
+          </button>
+
+          {/* Cart Icon */}
+          <button 
+            onClick={() => setIsCartOpen(true)}
+            className="relative text-brand-charcoal transition-colors duration-500 hover:opacity-70 group"
+          >
+            <ShoppingBag className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
+            {totalItems > 0 && (
+              <motion.span
+                key={totalItems}
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: [1.2, 0.9, 1], opacity: 1 }}
+                transition={{ duration: 0.4, times: [0, 0.5, 1], ease: "easeInOut" }}
+                className="absolute -top-2 -right-2 bg-brand-taupe text-brand-charcoal text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-sm"
+              >
+                {totalItems}
+              </motion.span>
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu Overlay */}

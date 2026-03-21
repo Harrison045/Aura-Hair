@@ -1,6 +1,8 @@
-import { motion } from 'motion/react';
-import { ArrowRight, ShoppingBag } from 'lucide-react';
-import { useCart } from '../context/CartContext';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { ArrowRight } from 'lucide-react';
+import AddToCartButton from './AddToCartButton';
+import ProductModal from './ProductModal';
 import { Product, PRODUCTS } from '../constants/products';
 import { Link } from 'react-router-dom';
 
@@ -17,7 +19,7 @@ export default function Products({
   subtitle = "Everything you need for a flawless look. From 100% virgin hair bundles to nourishing, sulfate-free formulas.",
   showViewAll = true
 }: ProductsProps) {
-  const { addItem } = useCart();
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   return (
     <section id="shop" className="py-24 px-6 md:px-12 bg-theme-bg theme-transition">
@@ -50,6 +52,7 @@ export default function Products({
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="group cursor-pointer"
+                onClick={() => setSelectedProduct(product)}
               >
                 <div className="relative aspect-[4/5] overflow-hidden rounded-2xl mb-4 bg-theme-text/5">
                   <motion.img
@@ -63,18 +66,12 @@ export default function Products({
                     </div>
                   )}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500 flex items-end justify-center pb-6 opacity-0 group-hover:opacity-100 p-4">
-                    <button 
-                      onClick={() => addItem({
-                        id: product.id,
-                        name: product.name,
-                        price: product.price,
-                        image: product.image
-                      })}
-                      className="w-full bg-white text-brand-charcoal py-3 rounded-full text-sm font-medium shadow-xl transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 active:scale-95 flex items-center justify-center gap-2"
-                    >
-                      <ShoppingBag className="w-4 h-4" />
-                      Add to Bag
-                    </button>
+                    <div className="w-full" onClick={(e) => e.stopPropagation()}>
+                      <AddToCartButton 
+                        product={product}
+                        className="w-full bg-white text-brand-charcoal py-3 rounded-full text-sm font-medium shadow-xl transform translate-y-4 group-hover:translate-y-0 transition-all duration-300"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="flex justify-between items-start">
@@ -97,6 +94,12 @@ export default function Products({
           </div>
         )}
       </div>
+
+      <ProductModal 
+        product={selectedProduct}
+        isOpen={!!selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+      />
     </section>
   );
 }

@@ -10,8 +10,8 @@ export default function Home() {
       <Hero />
       <Values />
       <Quiz />
-      <Products />
       <Lookbook />
+      <Products />
     </>
   );
 }

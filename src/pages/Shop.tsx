@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, ShoppingBag, X } from 'lucide-react';
+import AddToCartButton from '../components/AddToCartButton';
+import ProductModal from '../components/ProductModal';
 import { PRODUCTS, LOOKBOOK_ITEMS, Product, LookbookItem } from '../constants/products';
 import { useCart } from '../context/CartContext';
 
@@ -16,6 +18,7 @@ export default function Shop() {
   const [activeCategory, setActiveCategory] = useState<Category>('All');
   const [sortBy, setSortBy] = useState<SortOption>('newest');
   const [selectedLook, setSelectedLook] = useState<LookbookItem | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const { addItem } = useCart();
 
   const categories: Category[] = ['All', 'Bundles', 'Care', 'Wigs', 'Extensions'];
@@ -74,15 +77,12 @@ export default function Shop() {
     return result;
   }, [searchQuery, activeCategory, sortBy]);
 
-  const handleAddProduct = (e: React.MouseEvent, item: Product | LookbookItem) => {
-    e.stopPropagation();
-    const isProduct = 'name' in item;
-    addItem({
-      id: item.id,
-      name: isProduct ? item.name : item.product,
-      price: item.price,
-      image: isProduct ? item.image : item.src
-    });
+  const handleItemClick = (item: GridItem) => {
+    if (item.gridType === 'lifestyle') {
+      setSelectedLook(item);
+    } else {
+      setSelectedProduct(item);
+    }
   };
 
   return (
@@ -179,7 +179,7 @@ export default function Shop() {
                   className="break-inside-avoid"
                 >
                   <div 
-                    onClick={() => item.gridType === 'lifestyle' && setSelectedLook(item)}
+                    onClick={() => handleItemClick(item)}
                     className={`relative group cursor-pointer overflow-hidden rounded-2xl ${item.gridType === 'product' ? 'aspect-[4/5]' : item.aspect} bg-theme-text/5 transition-all duration-700 shadow-sm hover:shadow-xl hover:shadow-brand-charcoal/5`}
                   >
                     {/* Image */}
@@ -220,13 +220,23 @@ export default function Shop() {
                         </span>
                       </div>
 
-                      <button 
-                        onClick={(e) => handleAddProduct(e, item)}
-                        className="w-full bg-white text-brand-charcoal py-3.5 rounded-full text-xs font-bold tracking-tight hover:bg-brand-taupe transition-colors flex items-center justify-center gap-2 active:scale-[0.98]"
-                      >
-                        <ShoppingBag className="w-4 h-4" />
-                        {item.gridType === 'product' ? 'Quick Add' : 'Shop This Look'}
-                      </button>
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <AddToCartButton 
+                          product={item.gridType === 'product' ? {
+                            id: item.id,
+                            name: item.name,
+                            price: item.price,
+                            image: item.image
+                          } : {
+                            id: item.id,
+                            name: item.product,
+                            price: item.price,
+                            image: item.src
+                          }}
+                          defaultText={item.gridType === 'product' ? 'Quick Add' : 'Shop This Look'}
+                          className="w-full bg-white text-brand-charcoal py-3.5 rounded-full text-xs font-bold tracking-tight hover:bg-brand-taupe transition-colors"
+                        />
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -235,6 +245,13 @@ export default function Shop() {
           )}
         </div>
       </section>
+
+      {/* Product Detail Modal */}
+      <ProductModal 
+        product={selectedProduct}
+        isOpen={!!selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+      />
 
       {/* Lightbox for Lifestyle Images */}
       <AnimatePresence>
@@ -262,13 +279,16 @@ export default function Shop() {
                   <h3 className="text-white text-xl md:text-2xl font-medium">{selectedLook.product}</h3>
                   <p className="text-white/70 mt-1">{selectedLook.caption}</p>
                 </div>
-                <button 
-                  className="bg-brand-taupe text-brand-charcoal px-8 py-4 rounded-full text-sm font-bold hover:bg-white transition-colors duration-300 flex items-center gap-2"
-                  onClick={(e) => handleAddProduct(e, selectedLook)}
-                >
-                  <ShoppingBag className="w-4 h-4" />
-                  Add to Bag — {selectedLook.price}
-                </button>
+                <AddToCartButton 
+                  product={{
+                    id: selectedLook.id,
+                    name: selectedLook.product,
+                    price: selectedLook.price,
+                    image: selectedLook.src
+                  }}
+                  defaultText={`Add to Bag — ${selectedLook.price}`}
+                  className="bg-brand-taupe text-brand-charcoal px-8 py-4 rounded-full text-sm font-bold hover:bg-white transition-colors duration-300"
+                />
               </div>
             </motion.div>
           </motion.div>

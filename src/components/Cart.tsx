@@ -1,9 +1,16 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Plus, Minus, Trash2, ShoppingBag } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
 export default function Cart() {
-  const { items, isCartOpen, setIsCartOpen, updateQuantity, removeItem, subtotal, totalItems } = useCart();
+  const navigate = useNavigate();
+  const { items, isCartOpen, setIsCartOpen, updateQuantity, removeItem, subtotal, totalItems, cartLoading } = useCart();
+
+  const handleCheckout = () => {
+    setIsCartOpen(false);
+    navigate('/checkout');
+  };
 
   return (
     <AnimatePresence>
@@ -42,7 +49,16 @@ export default function Cart() {
 
             {/* Content */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
-              {items.length === 0 ? (
+              {cartLoading ? (
+                <div className="h-full flex flex-col items-center justify-center space-y-4">
+                  <motion.div 
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    className="w-8 h-8 border-2 border-brand-taupe border-t-transparent rounded-full"
+                  />
+                  <p className="text-sm text-theme-text opacity-40">Syncing with Aura...</p>
+                </div>
+              ) : items.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-center space-y-4">
                   <div className="w-20 h-20 bg-brand-rose/10 rounded-full flex items-center justify-center text-brand-rose">
                     <ShoppingBag className="w-10 h-10" />
@@ -112,7 +128,10 @@ export default function Cart() {
                 <p className="text-xs text-theme-text opacity-40 leading-relaxed">
                   Shipping and taxes calculated at checkout. Free shipping on orders over $150.
                 </p>
-                <button className="w-full bg-theme-text text-theme-bg py-4 rounded-full text-sm font-medium hover:bg-brand-taupe hover:text-theme-text transition-all duration-300 shadow-xl shadow-theme-text/10">
+                <button 
+                  onClick={handleCheckout}
+                  className="w-full bg-theme-text text-theme-bg py-4 rounded-full text-sm font-medium hover:bg-brand-taupe hover:text-theme-text transition-all duration-300 shadow-xl shadow-theme-text/10"
+                >
                   Checkout
                 </button>
               </div>
