@@ -15,6 +15,7 @@ import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import Cart from './components/Cart';
 import AuthModal from './components/AuthModal';
+import LoadingScreen from './components/LoadingScreen';
 
 export const CalmModeContext = createContext({
   calmMode: false,
@@ -23,6 +24,16 @@ export const CalmModeContext = createContext({
 
 export default function App() {
   const [calmMode, setCalmMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate initial loading
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     console.log('App: calmMode changed to', calmMode);
@@ -37,6 +48,7 @@ export default function App() {
     <CalmModeContext.Provider value={{ calmMode, toggleCalmMode: () => setCalmMode(!calmMode) }}>
       <AuthProvider>
         <CartProvider>
+          <LoadingScreen isLoading={isLoading} />
           <MotionConfig reducedMotion={calmMode ? "always" : "user"}>
             <BrowserRouter>
               <ScrollToTop />
